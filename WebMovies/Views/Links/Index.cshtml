@@ -1,0 +1,77 @@
+﻿@model IEnumerable<WebMovies.Models.Link>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.movieId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.url)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.reportRead)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserProfile.usrlogin)
+            </th>
+            <th></th>
+        </tr>
+    
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.movieId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.url)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.reportRead)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserProfile.usrlogin)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.linkId }) |
+                @Html.ActionLink("Details", "Details", new { id=item.linkId }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.linkId })
+            </td>
+        </tr>
+    }
+    
+    </table>
+</body>
+</html>

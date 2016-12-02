@@ -1,0 +1,82 @@
+﻿@model WebMovies.Models.UserProfile
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>UserProfile</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.usrlogin)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.usrlogin)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.enPassword)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.enPassword)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.firstName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.firstName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.lastName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.lastName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.email)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.email)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Country1.countryName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Country1.countryName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Language1.languageName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Language1.languageName)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.usrId }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>
