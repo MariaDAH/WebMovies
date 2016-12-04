@@ -1,9 +1,43 @@
 ﻿@model IEnumerable<WebMovies.Models.Favorite>
+@*@model PagedList.IPagedList<WebMovies.Models.Favorite>*@
+@*@model AutoCompleteInMVCJson.Models.Favorite*@ 
+@using PagedList.Mvc;
+
+<link href="~/Content/PagedList.css" rel="stylesheet" />
 
 @{
-    Layout = null;
+    ViewBag.Tittle = "Index";
+    //Layout = null;
 }
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#name").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Favorites/Index/Autocomplete",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Name, value: item.Name };
+                        }))
 
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+
+<h2>Favorites</h2>
 <!DOCTYPE html>
 
 <html>
@@ -15,26 +49,40 @@
     <p>
         @Html.ActionLink("Create New", "Create")
     </p>
+    <p>
+        @*@using (Html.BeginForm("Index", "Favorite", FormMethod.Get))
+        {*@
+        @using (Html.BeginForm())
+        {
+        <p>
+            Search Name: @Html.TextBox("searchData", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Find" />
+        </p>
+        }
+    </p>
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.name)
+                @Html.ActionLink("Name", "Index", new { Sorting_Order = ViewBag.SortingName,currentFilter = ViewBag.CurrentFilter})
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.description)
+                @*@Html.DisplayNameFor(model => model.description)*@
+                Description
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.date)
+                @Html.ActionLink("Date", "Index", new { sortOrder = ViewBag.SortingDate, current = ViewBag.CurrentFilter })
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Link.name)
+                @*@Html.DisplayNameFor(model => model.Link.name)*@
+                Link
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserProfile.usrlogin)
+                @*@Html.DisplayNameFor(model => model.UserProfile.usrId)*@
+                UserName
             </th>
             <th></th>
         </tr>
-    
+
     @foreach (var item in Model) {
         <tr>
             <td>
@@ -59,7 +107,24 @@
             </td>
         </tr>
     }
-    
+
     </table>
+    <br />
+
+    @*@if (Model != null
+        && Model.PageCount > 0)
+    {
+        <div>
+         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        </div>
+    }
+
+    @if (Model != null)
+    {
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    }*@
+
+
 </body>
 </html>

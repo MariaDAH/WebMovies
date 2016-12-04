@@ -15,14 +15,14 @@ namespace WebMovies.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Find it all about your favorite movies.";
 
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Ask any question directly to me in the address below.";
 
             return View();
         }

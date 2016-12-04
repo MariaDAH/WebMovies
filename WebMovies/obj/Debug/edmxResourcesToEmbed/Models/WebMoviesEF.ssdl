@@ -1,0 +1,337 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MyWebMoviesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Comment">
+    <Key>
+      <PropertyRef Name="commentId" />
+    </Key>
+    <Property Name="commentId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="usrId" Type="bigint" Nullable="false" />
+    <Property Name="linkId" Type="bigint" Nullable="false" />
+    <Property Name="commentText" Type="varchar" MaxLength="300" Nullable="false" />
+    <Property Name="date" Type="datetime2" Precision="7" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Country">
+    <Key>
+      <PropertyRef Name="countryCode" />
+    </Key>
+    <Property Name="countryCode" Type="nchar" MaxLength="2" Nullable="false" />
+    <Property Name="countryName" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Favorite">
+    <Key>
+      <PropertyRef Name="favoriteId" />
+    </Key>
+    <Property Name="favoriteId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="usrId" Type="bigint" Nullable="false" />
+    <Property Name="linkId" Type="bigint" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="120" />
+    <Property Name="description" Type="varchar" MaxLength="300" />
+    <Property Name="date" Type="datetime2" Precision="7" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Label">
+    <Key>
+      <PropertyRef Name="labelId" />
+    </Key>
+    <Property Name="labelId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="labelText" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Language">
+    <Key>
+      <PropertyRef Name="languageCode" />
+    </Key>
+    <Property Name="languageCode" Type="nchar" MaxLength="2" Nullable="false" />
+    <Property Name="languageName" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LanguageCountry">
+    <Key>
+      <PropertyRef Name="languageCode" />
+      <PropertyRef Name="countryCode" />
+    </Key>
+    <Property Name="languageCode" Type="nchar" MaxLength="2" Nullable="false" />
+    <Property Name="countryCode" Type="nchar" MaxLength="2" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Link">
+    <Key>
+      <PropertyRef Name="linkId" />
+    </Key>
+    <Property Name="linkId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="usrId" Type="bigint" />
+    <Property Name="movieId" Type="bigint" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="url" Type="varchar" MaxLength="150" Nullable="false" />
+    <Property Name="description" Type="varchar" MaxLength="300" />
+    <Property Name="date" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="reportRead" Type="bit" />
+  </EntityType>
+  <EntityType Name="LinkLabel">
+    <Key>
+      <PropertyRef Name="linkId" />
+      <PropertyRef Name="labelId" />
+    </Key>
+    <Property Name="linkId" Type="bigint" Nullable="false" />
+    <Property Name="labelId" Type="bigint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Rating">
+    <Key>
+      <PropertyRef Name="ratingId" />
+    </Key>
+    <Property Name="ratingId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="usrId" Type="bigint" Nullable="false" />
+    <Property Name="linkId" Type="bigint" Nullable="false" />
+    <Property Name="value" Type="int" Nullable="false" />
+    <Property Name="date" Type="datetime2" Precision="7" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserProfile">
+    <Key>
+      <PropertyRef Name="usrId" />
+    </Key>
+    <Property Name="usrId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="usrlogin" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="enPassword" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="firstName" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="lastName" Type="varchar" MaxLength="60" Nullable="false" />
+    <Property Name="email" Type="varchar" MaxLength="120" Nullable="false" />
+    <Property Name="language" Type="nchar" MaxLength="2" />
+    <Property Name="country" Type="nchar" MaxLength="2" />
+  </EntityType>
+  <Association Name="FK_Comment_LinkId">
+    <End Role="Link" Type="Self.Link" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Link">
+        <PropertyRef Name="linkId" />
+      </Principal>
+      <Dependent Role="Comment">
+        <PropertyRef Name="linkId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Comment_UsrId">
+    <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="usrId" />
+      </Principal>
+      <Dependent Role="Comment">
+        <PropertyRef Name="usrId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Favorite_LinkId">
+    <End Role="Link" Type="Self.Link" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Favorite" Type="Self.Favorite" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Link">
+        <PropertyRef Name="linkId" />
+      </Principal>
+      <Dependent Role="Favorite">
+        <PropertyRef Name="linkId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Favorite_UsrId">
+    <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Favorite" Type="Self.Favorite" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="usrId" />
+      </Principal>
+      <Dependent Role="Favorite">
+        <PropertyRef Name="usrId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LanguageCountry_CountryCode">
+    <End Role="Country" Type="Self.Country" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="LanguageCountry" Type="Self.LanguageCountry" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Country">
+        <PropertyRef Name="countryCode" />
+      </Principal>
+      <Dependent Role="LanguageCountry">
+        <PropertyRef Name="countryCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LanguageCountry_LanguageCode">
+    <End Role="Language" Type="Self.Language" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="LanguageCountry" Type="Self.LanguageCountry" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Language">
+        <PropertyRef Name="languageCode" />
+      </Principal>
+      <Dependent Role="LanguageCountry">
+        <PropertyRef Name="languageCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Link_UsrId">
+    <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="0..1" />
+    <End Role="Link" Type="Self.Link" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="usrId" />
+      </Principal>
+      <Dependent Role="Link">
+        <PropertyRef Name="usrId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LinkLabel_LabelId">
+    <End Role="Label" Type="Self.Label" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="LinkLabel" Type="Self.LinkLabel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Label">
+        <PropertyRef Name="labelId" />
+      </Principal>
+      <Dependent Role="LinkLabel">
+        <PropertyRef Name="labelId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LinkLabel_LinkId">
+    <End Role="Link" Type="Self.Link" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="LinkLabel" Type="Self.LinkLabel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Link">
+        <PropertyRef Name="linkId" />
+      </Principal>
+      <Dependent Role="LinkLabel">
+        <PropertyRef Name="linkId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Rating_LinkId">
+    <End Role="Link" Type="Self.Link" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Rating" Type="Self.Rating" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Link">
+        <PropertyRef Name="linkId" />
+      </Principal>
+      <Dependent Role="Rating">
+        <PropertyRef Name="linkId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Rating_UsrId">
+    <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Rating" Type="Self.Rating" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfile">
+        <PropertyRef Name="usrId" />
+      </Principal>
+      <Dependent Role="Rating">
+        <PropertyRef Name="usrId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserProfile_Country">
+    <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+    <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Country">
+        <PropertyRef Name="countryCode" />
+      </Principal>
+      <Dependent Role="UserProfile">
+        <PropertyRef Name="country" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserProfile_Language">
+    <End Role="Language" Type="Self.Language" Multiplicity="0..1" />
+    <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Language">
+        <PropertyRef Name="languageCode" />
+      </Principal>
+      <Dependent Role="UserProfile">
+        <PropertyRef Name="language" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MyWebMoviesModelStoreContainer">
+    <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Favorite" EntityType="Self.Favorite" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Label" EntityType="Self.Label" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Language" EntityType="Self.Language" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LanguageCountry" EntityType="Self.LanguageCountry" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Link" EntityType="Self.Link" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LinkLabel" EntityType="Self.LinkLabel" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Rating" EntityType="Self.Rating" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Comment_LinkId" Association="Self.FK_Comment_LinkId">
+      <End Role="Link" EntitySet="Link" />
+      <End Role="Comment" EntitySet="Comment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Comment_UsrId" Association="Self.FK_Comment_UsrId">
+      <End Role="UserProfile" EntitySet="UserProfile" />
+      <End Role="Comment" EntitySet="Comment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Favorite_LinkId" Association="Self.FK_Favorite_LinkId">
+      <End Role="Link" EntitySet="Link" />
+      <End Role="Favorite" EntitySet="Favorite" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Favorite_UsrId" Association="Self.FK_Favorite_UsrId">
+      <End Role="UserProfile" EntitySet="UserProfile" />
+      <End Role="Favorite" EntitySet="Favorite" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LanguageCountry_CountryCode" Association="Self.FK_LanguageCountry_CountryCode">
+      <End Role="Country" EntitySet="Country" />
+      <End Role="LanguageCountry" EntitySet="LanguageCountry" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LanguageCountry_LanguageCode" Association="Self.FK_LanguageCountry_LanguageCode">
+      <End Role="Language" EntitySet="Language" />
+      <End Role="LanguageCountry" EntitySet="LanguageCountry" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Link_UsrId" Association="Self.FK_Link_UsrId">
+      <End Role="UserProfile" EntitySet="UserProfile" />
+      <End Role="Link" EntitySet="Link" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LinkLabel_LabelId" Association="Self.FK_LinkLabel_LabelId">
+      <End Role="Label" EntitySet="Label" />
+      <End Role="LinkLabel" EntitySet="LinkLabel" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LinkLabel_LinkId" Association="Self.FK_LinkLabel_LinkId">
+      <End Role="Link" EntitySet="Link" />
+      <End Role="LinkLabel" EntitySet="LinkLabel" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Rating_LinkId" Association="Self.FK_Rating_LinkId">
+      <End Role="Link" EntitySet="Link" />
+      <End Role="Rating" EntitySet="Rating" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Rating_UsrId" Association="Self.FK_Rating_UsrId">
+      <End Role="UserProfile" EntitySet="UserProfile" />
+      <End Role="Rating" EntitySet="Rating" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserProfile_Country" Association="Self.FK_UserProfile_Country">
+      <End Role="Country" EntitySet="Country" />
+      <End Role="UserProfile" EntitySet="UserProfile" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserProfile_Language" Association="Self.FK_UserProfile_Language">
+      <End Role="Language" EntitySet="Language" />
+      <End Role="UserProfile" EntitySet="UserProfile" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
