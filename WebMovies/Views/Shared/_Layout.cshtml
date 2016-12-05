@@ -27,6 +27,12 @@
             </div>
         </div>
     </div>
+    @*<div id="sidebar">
+        @if(IsSectionDefined("SideBar"))
+        {
+            @RenderSection("Sidebar",required:false);
+        }
+    </div>*@
     <div class="container body-content">
         @RenderBody()
         <hr />

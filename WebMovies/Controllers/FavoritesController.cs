@@ -15,29 +15,26 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Simple.ImageResizer.MvcExtensions;
 using System.IO;
+using System.ComponentModel.DataAnnotations.Schema;
+using DelegateDecompiler;
 
 namespace WebMovies.Controllers
 {
     public class FavoritesController : Controller
     {
+        #region Properties
+
         private MyWebMoviesEntities db = new MyWebMoviesEntities();
 
-        //[HttpPost]
-        [AcceptVerbs(HttpVerbs.Post)]
-        public JsonResult Autocomplete(string prefix)
+        private class ImageToDisplay 
         {
-            var favoriteName = db.Favorites.Where(s => s.name.ToLower().Contains
-                          (prefix.ToLower())).Select(w => w).ToList();
-            return Json(favoriteName, JsonRequestBehavior.AllowGet);
+            public string ImageURL;
+            public string FavoriteName;
         }
 
+        #endregion 
 
-        [OutputCache(VaryByParam = "*", Duration = 60 * 60 * 24 * 365)]
-        public ImageResult GetImageResult(string filename, int w = 0, int h = 0)
-        {
-            string filepath = Path.Combine(Server.MapPath("~/images"), filename);
-            return new ImageResult(filepath, w, h);
-        }
+        #region CRUD_EF_Methods
 
         // GET: Favorites
         //public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchData, int? pageNo)
@@ -46,12 +43,11 @@ namespace WebMovies.Controllers
         //public ActionResult Index(string sortOrder, string currentFilter, string searchData, int? pageNo)
         //{
 
-        public async Task<ActionResult> Index(string sortOrder,string searchData)
+        public async Task<ActionResult> Index(string sortOrder, string searchData)
         {
             ViewBag.CurrentSortOrder = sortOrder;
             ViewBag.SortingName = String.IsNullOrEmpty(sortOrder) ? "Name" : "";
-            ViewBag.SortingDate = "Date" ;
-
+            ViewBag.SortingDate = "Date";
 
             //if (searchData != null)
             //{
@@ -75,21 +71,21 @@ namespace WebMovies.Controllers
             switch (sortOrder)
             {
                 case "Name":
-                favorites = favorites.OrderByDescending(fav => fav.name);
-                break;
+                    favorites = favorites.OrderByDescending(fav => fav.name);
+                    break;
                 case "Date":
-                favorites = favorites.OrderByDescending(fav => fav.date);
-                break;
+                    favorites = favorites.OrderByDescending(fav => fav.date);
+                    break;
                 default:
-                favorites = favorites.OrderByDescending(fav => fav.name);
-                break;
-              }
+                    favorites = favorites.OrderByDescending(fav => fav.name);
+                    break;
+            }
 
 
             //int pageSize = 4;
             //int pageNumber = (pageNo ?? 1);
 
-           
+
             //return View(await favorites.ToPagedListAsync(No_Of_Page, Size_Of_Page));
             //return View(favorites.ToPagedList(pageNumber, pageSize));
             return View(await favorites.ToListAsync());
@@ -110,7 +106,8 @@ namespace WebMovies.Controllers
             return View(favorite);
         }
 
-        // GET: Favorites/Create
+        //// GET: Favorites/Create
+        [Computed]
         public ActionResult Create()
         {
             ViewBag.linkId = new SelectList(db.Links, "linkId", "name");
@@ -206,5 +203,36 @@ namespace WebMovies.Controllers
             }
             base.Dispose(disposing);
         }
+        
+        #endregion 
+
+        #region ViewDinamycMethods
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public JsonResult Autocomplete(string prefix)
+        {
+            var favoriteName = db.Favorites.Where(s => s.name.ToLower().Contains
+                          (prefix.ToLower())).Select(w => w).ToList();
+            return Json(favoriteName, JsonRequestBehavior.AllowGet);
+        } //End Action Autocomplete
+
+        public JsonResult GetImageList()
+        {
+            List<ImageToDisplay> ls = new List<ImageToDisplay>();
+
+            ls.Add(new ImageToDisplay { ImageURL = Url.Content("~/Content/images/darkcrystal1982.jpg"), FavoriteName = "DarkCryst" });
+            ls.Add(new ImageToDisplay { ImageURL = Url.Content("~/Content/images/labyrith1986.jpg"), FavoriteName = "Labyr" });
+            ls.Add(new ImageToDisplay { ImageURL = Url.Content("~/Content/images/romanholidays1953.jpg"), FavoriteName = "RomanHol" });
+            ls.Add(new ImageToDisplay { ImageURL = Url.Content("~/Content/images/seven1995.jpg"), FavoriteName = "Seven" });
+            ls.Add(new ImageToDisplay { ImageURL = Url.Content("~/Content/images/tesis1996.jpg"), FavoriteName = "Tesis" });
+            ls.Add(new ImageToDisplay { ImageURL = Url.Content("~/Content/images/the4feathers1977.jpg"), FavoriteName = "the4feath" });
+            ls.Add(new ImageToDisplay { ImageURL = Url.Content("~/Content/images/theneverendingstory1984.jpg"), FavoriteName = "the4feath" });
+            ls.Add(new ImageToDisplay { ImageURL = Url.Content("~/Content/images/thepincessbride1987.jpg"), FavoriteName = "theprincess" });
+            ls.Add(new ImageToDisplay { ImageURL = Url.Content("~/Content/images/willow1988.jpg"), FavoriteName = "will" });
+
+            return Json(ls, JsonRequestBehavior.AllowGet);
+        } // End Action GetImageList
+
+        #endregion
     }
 }

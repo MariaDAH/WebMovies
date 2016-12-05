@@ -9,6 +9,7 @@
 
 namespace WebMovies.Models
 {
+    using DelegateDecompiler;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
@@ -25,13 +26,19 @@ namespace WebMovies.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Comment> Comments { get; set; }
-        public virtual DbSet<Country> Countries { get; set; }
-        public virtual DbSet<Favorite> Favorites { get; set; }
-        public virtual DbSet<Label> Labels { get; set; }
-        public virtual DbSet<Language> Languages { get; set; }
-        public virtual DbSet<Link> Links { get; set; }
-        public virtual DbSet<Rating> Ratings { get; set; }
-        public virtual DbSet<UserProfile> UserProfiles { get; set; }
+        //Remove virtual to avoid lazy loading
+        //Assing Computed
+        public DbSet<Comment> Comments { get; set; }
+        [Computed]
+        public DbSet<Country> Countries { get; set; }
+        [Computed]
+        public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<Label> Labels { get; set; }
+        [Computed]
+        public DbSet<Language> Languages { get; set; }
+        public DbSet<Link> Links { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
+        [Computed]
+        public DbSet<UserProfile> UserProfiles { get; set; }
     }
 }

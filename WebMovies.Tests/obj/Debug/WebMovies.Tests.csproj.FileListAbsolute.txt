@@ -12,6 +12,8 @@ C:\Users\Mixiña\documents\visual studio 2013\Projects\WebMovies\WebMovies.Tests
 C:\Users\Mixiña\documents\visual studio 2013\Projects\WebMovies\WebMovies.Tests\bin\Debug\WebMovies.dll
 C:\Users\Mixiña\documents\visual studio 2013\Projects\WebMovies\WebMovies.Tests\bin\Debug\EntityFramework.dll
 C:\Users\Mixiña\documents\visual studio 2013\Projects\WebMovies\WebMovies.Tests\bin\Debug\System.Web.Optimization.dll
+C:\Users\Mixiña\documents\visual studio 2013\Projects\WebMovies\WebMovies.Tests\bin\Debug\DelegateDecompiler.dll
+C:\Users\Mixiña\documents\visual studio 2013\Projects\WebMovies\WebMovies.Tests\bin\Debug\Mono.Reflection.dll
 C:\Users\Mixiña\documents\visual studio 2013\Projects\WebMovies\WebMovies.Tests\bin\Debug\WebMovies.pdb
 C:\Users\Mixiña\documents\visual studio 2013\Projects\WebMovies\WebMovies.Tests\bin\Debug\Newtonsoft.Json.xml
 C:\Users\Mixiña\documents\visual studio 2013\Projects\WebMovies\WebMovies.Tests\bin\Debug\System.Web.Helpers.xml

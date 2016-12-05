@@ -11,17 +11,51 @@ namespace WebMovies.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
+
+    [Table("WebMoviesEF.Favorite")]
     public partial class Favorite
     {
+        [Key]
+        [Column(Order = 0)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public long favoriteId { get; set; }
+
+        [Key]
+        [Column(Order = 1)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public long usrId { get; set; }
+
+        [Key]
+        [Column(Order = 2)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public long linkId { get; set; }
+
+        [Key]
+        [Column(Order = 3)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string name { get; set; }
+
+        [Key]
+        [Column(Order = 4)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string description { get; set; }
+
+        [Key]
+        [Column(Order = 4)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public System.DateTime date { get; set; }
-    
+
+        [Key]
+        [Column(Order = 5)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public virtual Link Link { get; set; }
+
+        [Key]
+        [Column(Order = 6)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public virtual UserProfile UserProfile { get; set; }
     }
 }

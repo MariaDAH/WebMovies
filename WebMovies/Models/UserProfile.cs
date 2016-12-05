@@ -9,12 +9,17 @@
 
 namespace WebMovies.Models
 {
+    using DelegateDecompiler;
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
+    [Table("WebMoviesEF.UserProfile")]
     public partial class UserProfile
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        
         public UserProfile()
         {
             this.Comments = new HashSet<Comment>();
@@ -22,25 +27,78 @@ namespace WebMovies.Models
             this.Links = new HashSet<Link>();
             this.Ratings = new HashSet<Rating>();
         }
-    
-        public long usrId { get; set; }
+
+        [Key]
+        [Column(Order = 0)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long usrId { get; set;}
+
+        [Key]
+        [Column(Order = 1)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string usrlogin { get; set; }
+
+        [Key]
+        [Column(Order = 2)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string enPassword { get; set; }
+
+        [Key]
+        [Column(Order = 3)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string firstName { get; set; }
+
+        [Key]
+        [Column(Order = 4)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string lastName { get; set; }
+
+        [Key]
+        [Column(Order = 5)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string email { get; set; }
+
+        [Key]
+        [Column(Order = 6)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string language { get; set; }
+
+        [Key]
+        [Column(Order = 7)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string country { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+
+        [Key]
+        [Column(Order = 8)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public virtual ICollection<Comment> Comments { get; set; }
+
+        [Key]
+        [Column(Order = 9)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public virtual Country Country1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+
+        [Key]
+        [Column(Order = 10)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public virtual ICollection<Favorite> Favorites { get; set; }
+
+        [Key]
+        [Column(Order = 11)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public virtual Language Language1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+
+        [Key]
+        [Column(Order = 12)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public virtual ICollection<Link> Links { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+        [Key]
+        [Column(Order = 13)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public virtual ICollection<Rating> Ratings { get; set; }
     }
 }

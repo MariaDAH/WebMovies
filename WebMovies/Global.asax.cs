@@ -21,7 +21,7 @@ namespace WebMovies
 
         protected void Session_Start(object sender, EventArgs e)
         {
-            //SessionManager.TouchSession(Context);
+
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)

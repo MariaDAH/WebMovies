@@ -1,23 +1,22 @@
 ﻿@model IEnumerable<WebMovies.Models.Favorite>
 @*@model PagedList.IPagedList<WebMovies.Models.Favorite>*@
-@*@model AutoCompleteInMVCJson.Models.Favorite*@ 
 @using PagedList.Mvc;
 
 <link href="~/Content/PagedList.css" rel="stylesheet" />
 
 @{
     ViewBag.Tittle = "Index";
-    //Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#name").autocomplete({
+        $("#searchData").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: "/Favorites/Index/Autocomplete",
+                    url: @Url.Action("Autocomplete","Favorites"),
                     type: "POST",
                     dataType: "json",
                     data: { Prefix: request.term },
@@ -35,17 +34,67 @@
         });
     })
 </script>
+<script type="text/javascript">
+    $(document).ready(function () {
 
+        var url = "@Url.Action("GetImageList", "Favorites")";
+        $.getJSON(url, function (data) {
+            var jsd = JSON.stringify(data);
+            var data1 = '{"Items":' + jsd + '}';
+            var k = jQuery.parseJSON(data1);
+            alert(data);
+            $.each(k.Items, function (i, item) {
+                var stringbuilder = [];
+                stringbuilder.push(' <div ><span class="span1"><img src="' + item.ImageURL + '" name="productimage"></span><span class="span2">' + item.FavoriteName + '</span><p></p></div>');
+                $('#BundleDetails').append(stringbuilder.join(''));
+            });
+
+        }); // End getJSON
+
+    }); // End document.ready
+</script>
+<script>
+    /*Menu-toggle*/
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("active");
+    });
+
+    /*Scroll Spy*/
+    $('body').scrollspy({ target: '#spy', offset:80});
+
+    /*Smooth link animation*/
+    $('a[href*=#]:not([href=#])').click(function() {
+        if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
+
+            var target = $(this.hash);
+            target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+            if (target.length) {
+                $('html,body').animate({
+                    scrollTop: target.offset().top
+                }, 1000);
+                return false;
+            }
+        }
+    });
+</script>
 
 <h2>Favorites</h2>
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
 </head>
-<body>
+<body>    
+    @*@section SideBar
+    {
+        <p> This is a new section</p>
+        <ul>
+       
+        </ul>
+        <p> Today is: @DateTime.Now.ToShortDateString()</p>
+    }*@
     <p>
         @Html.ActionLink("Create New", "Create")
     </p>
@@ -54,6 +103,7 @@
         {*@
         @using (Html.BeginForm())
         {
+            @Html.AntiForgeryToken()
         <p>
             Search Name: @Html.TextBox("searchData", ViewBag.CurrentFilter as string)
             <input type="submit" value="Find" />

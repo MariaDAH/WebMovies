@@ -1,0 +1,421 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GenericLibsBase</name>
+    </assembly>
+    <members>
+        <member name="T:GenericLibsBase.Core.SuccessOrErrors">
+            <summary>
+            This class handles feedback of success or errors from an operation
+            </summary>
+        </member>
+        <member name="T:GenericLibsBase.ISuccessOrErrors">
+            <summary>
+            Interface for handling feedback of success or errors from an operation
+            </summary>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors.AddWarning(System.String,System.Object[])">
+            <summary>
+            Adds a warning message. It places the test 'Warning: ' before the message
+            </summary>
+            <param name="warningformat"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors.SetErrors(System.Collections.Generic.IEnumerable{System.ComponentModel.DataAnnotations.ValidationResult})">
+            <summary>
+            Copies in validation errors found outside into the status
+            </summary>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors.SetErrors(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            This sets the error list to a series of non property specific error messages
+            </summary>
+            <param name="errors"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors.AddSingleError(System.String,System.Object[])">
+            <summary>
+            Allows a single error to be set.
+            </summary>
+            <param name="errorformat"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors.AddNamedParameterError(System.String,System.String,System.Object[])">
+            <summary>
+            This adds an error for a specific, named parameter
+            </summary>
+            <param name="parameterName"></param>
+            <param name="errorformat"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors.Combine(System.Object)">
+            <summary>
+            This combines any errors or warnings into the current status.
+            Note: it does NOT copy any success message into the current status
+            as it is the job of the outer status to set its own success message
+            </summary>
+            <param name="status"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors.SetSuccessMessage(System.String,System.Object[])">
+            <summary>
+            This sets a success message and sets the IsValid flag to true
+            </summary>
+            <param name="successformat"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors.GetAllErrors(System.String)">
+            <summary>
+            This returns all the error messages, with parameter name prefix if appropriate, joined together into one long string
+            </summary>
+            <param name="joinWith">By default joined using \n, i.e. newline. Can provide different join string </param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors.ErrorsAsHtml">
+            <summary>
+            This returns the errors as:
+            If only one error then as a html p 
+            If multiple errors then as an unordered list
+            </summary>
+            <returns>simple html data without any classes</returns>
+        </member>
+        <member name="P:GenericLibsBase.ISuccessOrErrors.Errors">
+            <summary>
+            Holds the list of errors. Empty list means no errors. Null means validation has not been done
+            </summary>
+        </member>
+        <member name="P:GenericLibsBase.ISuccessOrErrors.Warnings">
+            <summary>
+            This returns any warning messages
+            </summary>
+        </member>
+        <member name="P:GenericLibsBase.ISuccessOrErrors.IsValid">
+            <summary>
+            Returns true if not errors or not validated yet, else false. 
+            </summary>
+        </member>
+        <member name="P:GenericLibsBase.ISuccessOrErrors.HasErrors">
+            <summary>
+            Returns true if any errors. Note: different to IsValid in that it just checks for errors,
+            i.e. different to IsValid in that no errors but unset Validity will return false.
+            Useful for checking inside a method where the status is being manipulated.
+            </summary>
+        </member>
+        <member name="P:GenericLibsBase.ISuccessOrErrors.HasWarnings">
+            <summary>
+            Returns true if not errors or not validated yet, else false. 
+            </summary>
+        </member>
+        <member name="P:GenericLibsBase.ISuccessOrErrors.SuccessMessage">
+            <summary>
+            This returns the success message with suffix is nay warning messages
+            </summary>
+        </member>
+        <member name="M:GenericLibsBase.Core.SuccessOrErrors.AddWarning(System.String,System.Object[])">
+            <summary>
+            Adds a warning message. It places the test 'Warning: ' before the message
+            </summary>
+            <param name="warningformat"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:GenericLibsBase.Core.SuccessOrErrors.SetErrors(System.Collections.Generic.IEnumerable{System.ComponentModel.DataAnnotations.ValidationResult})">
+            <summary>
+            Copies in validation errors found outside into the status
+            </summary>
+        </member>
+        <member name="M:GenericLibsBase.Core.SuccessOrErrors.SetErrors(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            This sets the error list to a series of non property specific error messages
+            </summary>
+            <param name="errors"></param>
+        </member>
+        <member name="M:GenericLibsBase.Core.SuccessOrErrors.AddSingleError(System.String,System.Object[])">
+            <summary>
+            Allows a single error to be added
+            </summary>
+            <param name="errorformat"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.Core.SuccessOrErrors.AddNamedParameterError(System.String,System.String,System.Object[])">
+            <summary>
+            This adds an error for a specific, named parameter
+            </summary>
+            <param name="parameterName"></param>
+            <param name="errorformat"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.Core.SuccessOrErrors.Combine(System.Object)">
+            <summary>
+            This combines any errors or warnings into the current status.
+            Note: it does NOT copy any success message into the current status
+            as it is the job of the outer status to set its own success message
+            </summary>
+            <param name="status"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.Core.SuccessOrErrors.SetSuccessMessage(System.String,System.Object[])">
+            <summary>
+            This sets a success message and sets the IsValid flag to true
+            </summary>
+            <param name="successformat"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:GenericLibsBase.Core.SuccessOrErrors.Success(System.String,System.Object[])">
+            <summary>
+            This is a quick way to create an ISuccessOrErrors with a success message
+            </summary>
+            <param name="formattedSuccessMessage"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.Core.SuccessOrErrors.ToString">
+            <summary>
+            Useful one line error statement where brevity is needed
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.Core.SuccessOrErrors.GetAllErrors(System.String)">
+            <summary>
+            This returns all the error messages, with parameter name prefix if appropriate, joined together into one long string
+            </summary>
+            <param name="joinWith">By default joined using \n, i.e. newline. Can provide different join string </param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.Core.SuccessOrErrors.ErrorsAsHtml">
+            <summary>
+            This returns the errors as:
+            If only one error then as a html p 
+            If multiple errors then as an unordered list
+            </summary>
+            <returns>simple html data without any classes</returns>
+        </member>
+        <member name="P:GenericLibsBase.Core.SuccessOrErrors.Errors">
+            <summary>
+            Holds the list of errors. Empty list means no errors.
+            </summary>
+        </member>
+        <member name="P:GenericLibsBase.Core.SuccessOrErrors.Warnings">
+            <summary>
+            This returns any warning messages
+            </summary>
+        </member>
+        <member name="P:GenericLibsBase.Core.SuccessOrErrors.IsValid">
+            <summary>
+            Returns true if not errors or not validated yet, else false. 
+            </summary>
+        </member>
+        <member name="P:GenericLibsBase.Core.SuccessOrErrors.HasErrors">
+            <summary>
+            Returns true if any errors. Note: different to IsValid in that it just checks for errors,
+            i.e. different to IsValid in that no errors but unset Validity will return false.
+            Useful for checking inside a method where the status is being manipulated.
+            </summary>
+        </member>
+        <member name="P:GenericLibsBase.Core.SuccessOrErrors.HasWarnings">
+            <summary>
+            Returns true if not errors or not validated yet, else false. 
+            </summary>
+        </member>
+        <member name="P:GenericLibsBase.Core.SuccessOrErrors.SuccessMessage">
+            <summary>
+            This returns the success message with suffix is nay warning messages
+            </summary>
+        </member>
+        <member name="T:GenericLibsBase.GenericLibsBaseConfig">
+            <summary>
+            This static class holds the GenericLibsBase configuration
+            </summary>
+        </member>
+        <member name="F:GenericLibsBase.GenericLibsBaseConfig.NoLoggerInstance">
+            <summary>
+            This is a constant noLogger. Used when no logging is needed.
+            </summary>
+        </member>
+        <member name="M:GenericLibsBase.GenericLibsBaseConfig.GetLogger(System.String)">
+            <summary>
+            This returns the logger set in the Generic Service package
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="P:GenericLibsBase.GenericLibsBaseConfig.SetLoggerMethod">
+            <summary>
+            This should be given a method that takes a string, to have the logger, and returns an IGenericLogger instance. 
+            </summary>
+        </member>
+        <member name="T:GenericLibsBase.ISuccessOrErrors`1">
+            <summary>
+            Interface for handling feedback of success or errors and, if successful returns a result
+            </summary>
+            <typeparam name="T">The Type of the Result to return if IsValid is true</typeparam>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors`1.SetSuccessWithResult(`0,System.String,System.Object[])">
+            <summary>
+            This sets a successful end by setting the Result and supplying a success message
+            </summary>
+            <param name="result"></param>
+            <param name="successformat"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors`1.UpdateSuccessMessage(System.String,System.Object[])">
+            <summary>
+            This allows the current success message to be updated
+            </summary>
+            <param name="successformat"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors`1.AddWarning(System.String,System.Object[])">
+            <summary>
+            Adds a warning message. It places the test 'Warning: ' before the message
+            </summary>
+            <param name="warningformat"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors`1.SetErrors(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            This sets the error list to a series of non property specific error messages
+            </summary>
+            <param name="errors"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors`1.AddSingleError(System.String,System.Object[])">
+            <summary>
+            Allows a single error to be set.
+            </summary>
+            <param name="errorformat"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors`1.AddNamedParameterError(System.String,System.String,System.Object[])">
+            <summary>
+            This adds an error for a specific, named parameter
+            </summary>
+            <param name="parameterName"></param>
+            <param name="errorformat"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors`1.Combine(System.Object)">
+            <summary>
+            This combines any errors or warnings into the current status.
+            Note: it does NOT copy any success message into the current status
+            as it is the job of the outer status to set its own success message
+            </summary>
+            <param name="status"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors`1.GetAllErrors(System.String)">
+            <summary>
+            This returns all the error messages, with parameter name prefix if appropriate, joined together into one long string
+            </summary>
+            <param name="joinWith">By default joined using \n, i.e. newline. Can provide different join string </param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.ISuccessOrErrors`1.ErrorsAsHtml">
+            <summary>
+            This returns the errors as:
+            If only one error then as a html p 
+            If multiple errors then as an unordered list
+            </summary>
+            <returns>simple html data without any classes</returns>
+        </member>
+        <member name="P:GenericLibsBase.ISuccessOrErrors`1.Result">
+            <summary>
+            Holds the value set using SetSuccessWithResult
+            </summary>
+        </member>
+        <member name="P:GenericLibsBase.ISuccessOrErrors`1.Errors">
+            <summary>
+            Holds the list of errors. Empty list means no errors. Null means validation has not been done
+            </summary>
+        </member>
+        <member name="P:GenericLibsBase.ISuccessOrErrors`1.Warnings">
+            <summary>
+            This returns any warning messages
+            </summary>
+        </member>
+        <member name="P:GenericLibsBase.ISuccessOrErrors`1.IsValid">
+            <summary>
+            Returns true if not errors or not validated yet, else false. 
+            </summary>
+        </member>
+        <member name="P:GenericLibsBase.ISuccessOrErrors`1.HasErrors">
+            <summary>
+            Returns true if any errors. Note: different to IsValid in that it just checks for errors,
+            i.e. different to IsValid in that no errors but unset Validity will return false.
+            Useful for checking inside a method where the status is being manipulated.
+            </summary>
+        </member>
+        <member name="P:GenericLibsBase.ISuccessOrErrors`1.HasWarnings">
+            <summary>
+            Returns true if not errors or not validated yet, else false. 
+            </summary>
+        </member>
+        <member name="P:GenericLibsBase.ISuccessOrErrors`1.SuccessMessage">
+            <summary>
+            This returns the success message with suffix is nay warning messages
+            </summary>
+        </member>
+        <member name="T:GenericLibsBase.NoLoggingGenericLogger">
+            <summary>
+            This is the default Generic Logger, which does no logging
+            </summary>
+        </member>
+        <member name="M:GenericLibsBase.SplitterExtension.SplitCamelCase(System.String)">
+            <summary>
+            This splits up a string based on capital letters
+            e.g. "MyAction" would become "My Action" and "My10Action" would become "My10 Action"
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GenericLibsBase.Core.SuccessOrErrors`1">
+            <summary>
+            This class handles feedback of success or errors and, if successful returns a result
+            </summary>
+            <typeparam name="T">The Type of the Result to return if IsValid is true</typeparam>
+        </member>
+        <member name="M:GenericLibsBase.Core.SuccessOrErrors`1.SetSuccessWithResult(`0,System.String,System.Object[])">
+            <summary>
+            This sets a successful end by setting the Result and supplying a success message 
+            </summary>
+            <param name="result"></param>
+            <param name="successformat"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:GenericLibsBase.Core.SuccessOrErrors`1.UpdateSuccessMessage(System.String,System.Object[])">
+            <summary>
+            This allows the current success message to be updated
+            </summary>
+            <param name="successformat"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.Core.SuccessOrErrors`1.ConvertNonResultStatus(System.Object)">
+            <summary>
+            Turns the non result status into a result status by copying any errors or warnings
+            </summary>
+            <param name="status">Can be a non-result status, or a result status of a different type</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericLibsBase.Core.SuccessOrErrors`1.SuccessWithResult(`0,System.String,System.Object[])">
+            <summary>
+            This is a quick way to create an ISuccessOrErrors(T) with a success message and result
+            </summary>
+            <param name="result"></param>
+            <param name="formattedSuccessMessage"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="P:GenericLibsBase.Core.SuccessOrErrors`1.Result">
+            <summary>
+            Holds the value set using SetSuccessWithResult
+            </summary>
+        </member>
+    </members>
+</doc>

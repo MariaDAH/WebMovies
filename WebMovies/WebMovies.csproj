@@ -39,6 +39,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=4.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DelegateDecompiler, Version=1.0.0.0, Culture=neutral, PublicKeyToken=93b26a10a04705bd, processorArchitecture=MSIL">
+      <HintPath>..\packages\DelegateDecompiler.0.18.0\lib\net40-Client\DelegateDecompiler.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DelegateDecompiler.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=93b26a10a04705bd, processorArchitecture=MSIL">
+      <HintPath>..\packages\DelegateDecompiler.EntityFramework.0.18.0\lib\net45\DelegateDecompiler.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -47,15 +59,18 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="GenericLibsBase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GenericLibsBase.1.0.1\lib\GenericLibsBase.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GenericServices, Version=1.0.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GenericServices.1.0.10\lib\GenericServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Configuration.Design.HostAdapter">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Lib\Microsoft.Practices.EnterpriseLibrary.Configuration.Design.HostAdapter.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Configuration.Design.HostAdapterV5">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Lib\Microsoft.Practices.EnterpriseLibrary.Configuration.Design.HostAdapterV5.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Configuration.DesignTime">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Lib\Microsoft.Practices.EnterpriseLibrary.Configuration.DesignTime.dll</HintPath>
+    <Reference Include="Mono.Reflection, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Reflection.1.0.0.0\lib\Mono.Reflection.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
@@ -211,15 +226,15 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="images\darkcrystal1982.jpg" />
-    <Content Include="images\labyrith1986.jpg" />
-    <Content Include="images\romanholidays1953.jpg" />
-    <Content Include="images\seven1995.jpg" />
-    <Content Include="images\tesis1996.jpg" />
-    <Content Include="images\the4feathers1977.jpg" />
-    <Content Include="images\theneverendingstory1984.jpg" />
-    <Content Include="images\theprincessbride1987.jpg" />
-    <Content Include="images\willow1988.jpg" />
+    <Content Include="Content\images\darkcrystal1982.jpg" />
+    <Content Include="Content\images\labyrith1986.jpg" />
+    <Content Include="Content\images\romanholidays1953.jpg" />
+    <Content Include="Content\images\seven1995.jpg" />
+    <Content Include="Content\images\tesis1996.jpg" />
+    <Content Include="Content\images\the4feathers1977.jpg" />
+    <Content Include="Content\images\theneverendingstory1984.jpg" />
+    <Content Include="Content\images\theprincessbride1987.jpg" />
+    <Content Include="Content\images\willow1988.jpg" />
     <Content Include="Models\Sql\MyWebMoviesScript.sql" />
     <Content Include="Models\Sql\PopulateMyWebMoviesScript.sql" />
     <Content Include="Scripts\bootstrap.js" />
@@ -314,16 +329,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Http\Application\" />
-    <Folder Include="Http\Session\" />
-    <Folder Include="Http\Util\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
-    <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

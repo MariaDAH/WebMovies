@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MyWebMoviesModelStoreContainer" CdmEntityContainer="MyWebMoviesEntities">
+    <EntitySetMapping Name="Comments">
+      <EntityTypeMapping TypeName="MyWebMoviesModel.Comment">
+        <MappingFragment StoreEntitySet="Comment">
+          <ScalarProperty Name="commentId" ColumnName="commentId" />
+          <ScalarProperty Name="usrId" ColumnName="usrId" />
+          <ScalarProperty Name="linkId" ColumnName="linkId" />
+          <ScalarProperty Name="commentText" ColumnName="commentText" />
+          <ScalarProperty Name="date" ColumnName="date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Countries">
+      <EntityTypeMapping TypeName="MyWebMoviesModel.Country">
+        <MappingFragment StoreEntitySet="Country">
+          <ScalarProperty Name="countryCode" ColumnName="countryCode" />
+          <ScalarProperty Name="countryName" ColumnName="countryName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Favorites">
+      <EntityTypeMapping TypeName="MyWebMoviesModel.Favorite">
+        <MappingFragment StoreEntitySet="Favorite">
+          <ScalarProperty Name="favoriteId" ColumnName="favoriteId" />
+          <ScalarProperty Name="usrId" ColumnName="usrId" />
+          <ScalarProperty Name="linkId" ColumnName="linkId" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="date" ColumnName="date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Labels">
+      <EntityTypeMapping TypeName="MyWebMoviesModel.Label">
+        <MappingFragment StoreEntitySet="Label">
+          <ScalarProperty Name="labelId" ColumnName="labelId" />
+          <ScalarProperty Name="labelText" ColumnName="labelText" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Languages">
+      <EntityTypeMapping TypeName="MyWebMoviesModel.Language">
+        <MappingFragment StoreEntitySet="Language">
+          <ScalarProperty Name="languageCode" ColumnName="languageCode" />
+          <ScalarProperty Name="languageName" ColumnName="languageName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Links">
+      <EntityTypeMapping TypeName="MyWebMoviesModel.Link">
+        <MappingFragment StoreEntitySet="Link">
+          <ScalarProperty Name="linkId" ColumnName="linkId" />
+          <ScalarProperty Name="usrId" ColumnName="usrId" />
+          <ScalarProperty Name="movieId" ColumnName="movieId" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="url" ColumnName="url" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="reportRead" ColumnName="reportRead" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ratings">
+      <EntityTypeMapping TypeName="MyWebMoviesModel.Rating">
+        <MappingFragment StoreEntitySet="Rating">
+          <ScalarProperty Name="ratingId" ColumnName="ratingId" />
+          <ScalarProperty Name="usrId" ColumnName="usrId" />
+          <ScalarProperty Name="linkId" ColumnName="linkId" />
+          <ScalarProperty Name="value" ColumnName="value" />
+          <ScalarProperty Name="date" ColumnName="date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserProfiles">
+      <EntityTypeMapping TypeName="MyWebMoviesModel.UserProfile">
+        <MappingFragment StoreEntitySet="UserProfile">
+          <ScalarProperty Name="usrId" ColumnName="usrId" />
+          <ScalarProperty Name="usrlogin" ColumnName="usrlogin" />
+          <ScalarProperty Name="enPassword" ColumnName="enPassword" />
+          <ScalarProperty Name="firstName" ColumnName="firstName" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="language" ColumnName="language" />
+          <ScalarProperty Name="country" ColumnName="country" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="LanguageCountry" TypeName="MyWebMoviesModel.LanguageCountry" StoreEntitySet="LanguageCountry">
+      <EndProperty Name="Country">
+        <ScalarProperty Name="countryCode" ColumnName="countryCode" />
+      </EndProperty>
+      <EndProperty Name="Language">
+        <ScalarProperty Name="languageCode" ColumnName="languageCode" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="LinkLabel" TypeName="MyWebMoviesModel.LinkLabel" StoreEntitySet="LinkLabel">
+      <EndProperty Name="Label">
+        <ScalarProperty Name="labelId" ColumnName="labelId" />
+      </EndProperty>
+      <EndProperty Name="Link">
+        <ScalarProperty Name="linkId" ColumnName="linkId" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

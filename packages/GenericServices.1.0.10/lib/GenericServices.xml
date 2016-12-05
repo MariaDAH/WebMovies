@@ -1,0 +1,1309 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GenericServices</name>
+    </assembly>
+    <members>
+        <member name="T:GenericServices.Core.EfGenericDtoBase`2">
+            <summary>
+            This should not be used. It is used as the base for EfGenericDto and EfGenericDtoAsync
+            This partial class contains all the code to setup the DTO.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TDto"></typeparam>
+            <summary>
+            This should not be used. It is used as the base for EfGenericDto and EfGenericDtoAsync
+            and contained all the common methods/properties
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TDto"></typeparam>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDtoBase`2.#ctor">
+            <summary>
+            Constructor. This ensures that the mappings are set up on creation of the class
+            and sets the NeedsDecompile property based on checking 
+            </summary>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDtoBase`2.AssociatedMapperSetup(AutoMapper.IMapperConfiguration,System.Boolean)">
+            <summary>
+            This is used to set up the mapping of any associated EfGenericDto 
+            NOTE: It needs to be protected as the reflection .GetMethod doens't find a private method
+            </summary>
+            <param name="cfg"></param>
+            <param name="readFromDatabase"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDtoBase`2.MapperSetup">
+            <summary>
+            This sets all the AutoMapper mapping that this dto needs. It is called from the base constructor
+            It also makes sure that any associated dto mappings are set up as the order of creation is not fixed
+            </summary>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDtoBase`2.CreateReadFromDatabaseMapping(AutoMapper.IMapperConfiguration,System.Boolean@)">
+            <summary>
+            This sets up the AutoMapper mapping for a copy from the TEntity to the TDto.
+            It applies any extra mapping provided by AddedDatabaseToDtoMapping if not null
+            </summary>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDtoBase`2.CreateWriteToDatabaseMapping(AutoMapper.IMapperConfiguration)">
+            <summary>
+            This sets up the AutoMapper mapping for a copy from the TDto to the TEntity.
+            Note that properties which have the [DoNotCopyBackToDatabase] attribute will not be copied
+            </summary>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDtoBase`2.SetupAllAssociatedMappings(AutoMapper.IMapperConfiguration,System.Boolean)">
+            <summary>
+            Set up any requested assocaiated mappings
+            </summary>
+        </member>
+        <member name="P:GenericServices.Core.EfGenericDtoBase`2.DataItemName">
+            <summary>
+            This provides the name of the name of the data item to display in success or error messages.
+            Override if you want a more user friendly name
+            </summary>
+        </member>
+        <member name="P:GenericServices.Core.EfGenericDtoBase`2.AddedDatabaseToDtoMapping">
+            <summary>
+            Override this to add .ForEach mappings that will be applied to the TEntity to TDto conversion
+            See 'DTO data copying, Using AutoMapper for calculated properties' in the documentation 
+            </summary>
+        </member>
+        <member name="P:GenericServices.Core.EfGenericDtoBase`2.AssociatedDtoMapping">
+            <summary>
+            Override this if your dto relies on another dto in its mapping
+            For instance if you are mapping a property that is a type and you want that to map to a dto then call this
+            </summary>
+        </member>
+        <member name="P:GenericServices.Core.EfGenericDtoBase`2.AssociatedDtoMappings">
+            <summary>
+            Override this if your dto relies on multiple other dtos in its mapping
+            For instance if you are mapping a property that is a type and you want that to map to a dto then call this
+            </summary>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDtoBase`2.GetDataUntracked(GenericServices.IGenericServicesDbContext)">
+            <summary>
+            This method is called to get the data table. Can be overridden if include statements are needed.
+            </summary>
+            <param name="context"></param>
+            <returns>returns an IQueryable of the table TEntity as Untracked</returns>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDtoBase`2.ListQueryUntracked(GenericServices.IGenericServicesDbContext)">
+            <summary>
+            This provides the IQueryable command to get a list of TEntity, but projected to TDto.
+            Can be overridden if standard AutoMapping isn't good enough, or return null if not supported
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDtoBase`2.AfterCreateCopyBackKeysToDtoIfPresent(GenericServices.IGenericServicesDbContext,`0)">
+            <summary>
+            This copies back the keys from a newly created entity into the dto as long as there are matching properties in the Dto
+            </summary>
+            <param name="context"></param>
+            <param name="newEntity"></param>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDtoBase`2.GetKeyValues(GenericServices.IGenericServicesDbContext)">
+            <summary>
+            This gets the key values from this DTO in the correct order. Used in FindItemTrackedForUpdate sync/async
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDtoBase`2.ApplyDecompileIfNeeded(System.Linq.IQueryable{`1})">
+            <summary>
+            This checks if the DelegateDecompiler is needed. If so it applies it to the query
+            </summary>
+            <returns>original query, but with Decompile applied if needed</returns>
+        </member>
+        <member name="T:GenericServices.Core.IGenericDbContext">
+            <summary>
+            This is the core Generic DbContext that all GenericXXXDbContexts reference, but should not be used by a user of this library
+            Anyone using GenericServices should use GenericServicesDbContexts
+            This interface is used in all the commands so that they can be used by other GenericXXX libraries 
+            </summary>
+        </member>
+        <member name="F:GenericServices.Core.Internal.CheckComputed.EntityHasComputed">
+            <summary>
+            This is the cache used to hold info on if the type contains the DelegateDecompiler [Computed] attribute
+            </summary>
+        </member>
+        <member name="M:GenericServices.Core.Internal.CheckComputed.ClassNeedsDecompile(System.Type)">
+            <summary>
+            This returns true if the config says we are using DelegateDecompiler and the class contains the DelegateDecompiler [Computed] attribute
+            </summary>
+            <param name="classToCheck"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Core.Internal.MappingHelper.IgnoreMarkedProperties``2(AutoMapper.IMappingExpression{``0,``1})">
+            <summary>
+            This is used to filter out all properties that have a [DoNotCopyBackToDatabase] attribute.
+            </summary>
+            <param name="mappingExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Core.Internal.DecodeToService`1.GetTypesFromInitialType``1(GenericServices.Core.Internal.WhatItShouldBe,GenericServices.Core.Internal.DecodeToService{`0}.SyncAsyncDefiner)">
+            <summary>
+            This decodes the type and returns an array of types. If the type is based on a GenericDto 
+            then it returns the Data type and the 
+            </summary>
+            <typeparam name="TD"></typeparam>
+            <param name="whatItShouldBe"></param>
+            <param name="syncAsync"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Core.Internal.DecodeToService`1.GetGenericTypesIfCorrectGeneric(System.Type,System.Type)">
+            <summary>
+            This returns the two classes of used to form the EfGenericDto. Null if it doesn't match the expected type
+            </summary>
+            <param name="classType">class type to check</param>
+            <param name="genericDtoClass">the type of the particular dto we are looking for, or EfGenericBase if either will do</param>
+            <returns>array of two classes if ok. Null array if not inherited from the right sync/async GenericDtoType</returns>
+        </member>
+        <member name="M:GenericServices.Core.Internal.EfKeyFinder.GetKeyProperties``1(GenericServices.IGenericServicesDbContext)">
+            <summary>
+            This returns PropertyInfos for all the properties in the class that are found in the entity framework metadata 
+            </summary>
+            <typeparam name="TClass">The class must belong to a class that entity framework has in its metadata</typeparam>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDtoAsync`2.SetupSecondaryDataAsync(GenericServices.IGenericServicesDbContext,`1)">
+            <summary>
+            This function will be called at the end of CreateSetupService and UpdateSetupService to setup any
+            additional data in the dto used to display dropdownlists etc. 
+            It is also called at the end of the CreateService or UpdateService if there are errors, so that
+            the data is available if the form needs to be reshown.
+            This function should be overridden if the dto needs additional data setup 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDtoAsync`2.FindItemTrackedForUpdateAsync(GenericServices.IGenericServicesDbContext)">
+            <summary>
+            This is used for update. This returns the TEntity item that fits the key(s) in the DTO.
+            Override this if you need to include any related entries when doing a complex update.
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDtoAsync`2.CreateDataFromDtoAsync(GenericServices.IGenericServicesDbContext,`1)">
+            <summary>
+            This is used in a create. It copies only the properties in TDto that have public setter into the TEntity.
+            You can override this if you need a more complex copy
+            </summary>
+            <param name="context"></param>
+            <param name="source"></param>
+            <returns>Task containing status which, if Valid, has new TEntity with data from DTO copied in</returns>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDtoAsync`2.UpdateDataFromDtoAsync(GenericServices.IGenericServicesDbContext,`1,`0)">
+            <summary>
+            This is used in an update. It copies only the properties in TDto that do not have the [DoNotCopyBackToDatabase] on them.
+            You can override this if you need a more complex copy
+            </summary>
+            <param name="context"></param>
+            <param name="source"></param>
+            <param name="destination"></param>
+            <return>Task containing status. destination is only valid if status.IsValid</return>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDtoAsync`2.DetailDtoFromDataInAsync(GenericServices.IGenericServicesDbContext,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This copies an existing TEntity into a new the dto using a Lambda expression to define the where clause
+            It copies TEntity properties into all TDto properties that have accessable setters, i.e. not private
+            </summary>
+            <returns>status. If Valid then dto, otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.Core.SecurityHelper.RealiseSingleWithErrorChecking``1(System.Linq.IQueryable{``0},System.String)">
+            <summary>
+            This will take an IQueryable request and add single on the end to realise the request.
+            It catches if the single didn't produce an item
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="request">An IQueryable request with a filter that yeilds a single item</param>
+            <param name="methodName">Do not specify. System fills this in with the calling method</param>
+            <returns>Returns status. If Valid then status.Result is the single item, otherwise an new, empty class</returns>
+        </member>
+        <member name="M:GenericServices.Core.SecurityHelper.RealiseSingleWithErrorCheckingAsync``1(System.Linq.IQueryable{``0},System.String)">
+            <summary>
+            This will take an IQueryable request and add single on the end to realise the request.
+            It catches if the single didn't produce an item
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="request">An IQueryable request with a filter that yeilds a single item</param>
+            <param name="methodName">Do not specify. System fills this in with the calling method</param>
+            <returns>Returns task with status. If Valid then status.Result is the single item, otherwise an new, empty class</returns>
+        </member>
+        <member name="T:GenericServices.Core.IGenericSaveChanges">
+            <summary>
+            This interface is used by the SaveChangesWithChecking extensions.
+            Uses of the GenericServices library should not need to use this as IGenericSaveChanges is included in the IGenericSericesDbContext already 
+            </summary>
+        </member>
+        <member name="T:GenericServices.Core.InstrumentedEfGenericDtoAsync`2.LogStartStop">
+            <summary>
+            Used to surround calls with using to catch start/end time
+            </summary>
+        </member>
+        <member name="P:GenericServices.Core.InstrumentedEfGenericDtoAsync`2.FunctionsCalledCommaDelimited">
+            <summary>
+            Instrumentation property which returns a list of call points as a comma delimited string.
+            For start/end call points it only returns one entry.
+            </summary>
+        </member>
+        <member name="P:GenericServices.Core.InstrumentedEfGenericDtoAsync`2.LogOfCalls">
+            <summary>
+            Instrumentation property which returns a list of instrumented call points with the time since the dto was created
+            </summary>
+        </member>
+        <member name="M:GenericServices.Core.InstrumentedEfGenericDtoAsync`2.LogSpecificName(System.String,GenericServices.Core.CallTypes)">
+            <summary>
+            Instrumentation method which allows a specific point to be logged with a given name
+            </summary>
+            <param name="callPoint"></param>
+            <param name="callType">defaults to Point</param>
+        </member>
+        <member name="M:GenericServices.Core.InstrumentedEfGenericDtoAsync`2.LogCaller(GenericServices.Core.CallTypes,System.String)">
+            <summary>
+            Thsi will log the name of the calling method
+            </summary>
+            <param name="callType">defaults to Point</param>
+            <param name="callerName">Do not use. Filled in by system with the calling method name</param>
+        </member>
+        <member name="M:GenericServices.Core.InstrumentedEfGenericDtoAsync`2.FindItemTrackedForUpdateAsync(GenericServices.IGenericServicesDbContext)">
+            <summary>
+            This returns the TEntity item that fits the key(s) in the DTO.
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="F:GenericServices.Core.CrudFunctions.DoesNotNeedSetup">
+            <summary>
+            By default the Create and Update services will call the method 'SetupSecondaryData' (sync and Async)
+            which you are supposed to override. As a safety precaution the default SetupSecondaryData method
+            will throw an exception if not overridden. 
+            If you don't need SetupSecondaryData then set the flag 'DoesNotNeedSetup' below to stop the call.
+            </summary>
+        </member>
+        <member name="P:GenericServices.Core.EfGenericDtoBase.NeedsDecompile">
+            <summary>
+            If this flag is set then .Decompile is added to any query
+            The flag is set on creation based on whether config UseDelegateDecompilerWhereNeeded flas is true
+            and class's TEntity class, or  any of the associatedDTO TEntity classes ,
+            has properties with the [Computed] attribute on them.
+            </summary>
+        </member>
+        <member name="P:GenericServices.Core.EfGenericDtoBase.ForceNeedDecompile">
+            <summary>
+            Override and set to true if you wish to force NeedDecompile as always on in this DTO.
+            Needed if accessing a calculated field in a related class
+            </summary>
+        </member>
+        <member name="P:GenericServices.Core.EfGenericDtoBase.SupportedFunctions">
+            <summary>
+            This must be overridden to say what functions the DTO supports.
+            Each method checks this and will throw an error if the service is not supported
+            </summary>
+        </member>
+        <member name="T:GenericServices.Core.InstrumentedEfGenericDto`2.LogStartStop">
+            <summary>
+            Used to surround calls with using to catch start/end time
+            </summary>
+        </member>
+        <member name="P:GenericServices.Core.InstrumentedEfGenericDto`2.FunctionsCalledCommaDelimited">
+            <summary>
+            Instrumentation property which returns a list of call points as a comma delimited string.
+            For start/end call points it only returns one entry.
+            </summary>
+        </member>
+        <member name="P:GenericServices.Core.InstrumentedEfGenericDto`2.LogOfCalls">
+            <summary>
+            Instrumentation property which returns a list of instrumented call points with the time since the dto was created
+            </summary>
+        </member>
+        <member name="M:GenericServices.Core.InstrumentedEfGenericDto`2.LogSpecificName(System.String,GenericServices.Core.CallTypes)">
+            <summary>
+            Instrumentation method which allows a specific point to be logged with a given name
+            </summary>
+            <param name="callPoint"></param>
+            <param name="callType">defaults to Point</param>
+        </member>
+        <member name="M:GenericServices.Core.InstrumentedEfGenericDto`2.LogCaller(GenericServices.Core.CallTypes,System.String)">
+            <summary>
+            Thsi will log the name of the calling method
+            </summary>
+            <param name="callType">defaults to Point</param>
+            <param name="callerName">Do not use. Filled in by system with the calling method name</param>
+        </member>
+        <member name="M:GenericServices.Core.InstrumentedEfGenericDto`2.DetailDtoFromDataIn(GenericServices.IGenericServicesDbContext,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This copies an existing TEntity into a new the dto using a Lambda expression to define the where clause
+            It copies TEntity properties into all TDto properties that have accessable setters, i.e. not private
+            </summary>
+            <returns>status. If valid result is dto. Otherwise null if not found</returns>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDto`2.SetupSecondaryData(GenericServices.IGenericServicesDbContext,`1)">
+            <summary>
+            This function will be called at the end of CreateSetupService and UpdateSetupService to setup any
+            additional data in the dto used to display dropdownlists etc. 
+            It is also called at the end of the CreateService or UpdateService if there are errors, so that
+            the data is available if the form needs to be reshown.
+            This function should be overridden if the dto needs additional data setup 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDto`2.FindItemTrackedForUpdate(GenericServices.IGenericServicesDbContext)">
+            <summary>
+            Used only by Update. This returns the TEntity item that fits the key(s) in the DTO.
+            Override this if you need to include any related entries when doing a complex update.
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDto`2.CreateDataFromDto(GenericServices.IGenericServicesDbContext,`1)">
+            <summary>
+            This is used in a create. It copies only the properties in TDto that have public setter into the TEntity.
+            You can override this if you need a more complex copy
+            </summary>
+            <param name="context"></param>
+            <param name="source"></param>
+            <returns>status which, if Valid, has new TEntity with data from DTO copied in</returns>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDto`2.UpdateDataFromDto(GenericServices.IGenericServicesDbContext,`1,`0)">
+            <summary>
+            This is used in an update. It copies only the properties in TDto that do not have the [DoNotCopyBackToDatabase] on them.
+            You can override this if you need a more complex copy
+            </summary>
+            <param name="context"></param>
+            <param name="source"></param>
+            <param name="destination"></param>
+            <return>status. destination is only valid if status.IsValid</return>
+        </member>
+        <member name="M:GenericServices.Core.EfGenericDto`2.DetailDtoFromDataIn(GenericServices.IGenericServicesDbContext,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This copies an existing TEntity into a new dto using a Lambda expression to define the where clause
+            It copies TEntity properties into all TDto properties that have accessable setters, i.e. not private
+            </summary>
+            <returns>status. If valid result is dto. Otherwise null</returns>
+        </member>
+        <member name="T:GenericServices.DoNotCopyBackToDatabaseAttribute">
+            <summary>
+            Place this on a property to stop it being copied back to the TEntity
+            </summary>
+        </member>
+        <member name="T:GenericServices.SaveChangesExtensions">
+            <summary>
+            This contains extention errors that change SaveChanges/SvaeChangesAsync into returning error messages
+            rather than an exception on certain types of errors.
+            </summary>
+        </member>
+        <member name="M:GenericServices.SaveChangesExtensions.SaveChangesWithChecking(GenericServices.Core.IGenericSaveChanges)">
+            <summary>
+            This extension will undertake a SaveChanges but will catch any validation errors 
+            or specific SqlException specified in ServicesConfiguration.SqlErrorDict and return
+            them as errors rather than throw an exception
+            </summary>
+            <param name="db"></param>
+            <returns>a status saying whether SaveChanges was successful or not. If not then holds errors</returns>
+        </member>
+        <member name="M:GenericServices.SaveChangesExtensions.SaveChangesWithCheckingAsync(GenericServices.Core.IGenericSaveChanges)">
+            <summary>
+            This extension will undertake a SaveChangesAsync but will catch any validation errors 
+            or specific SqlException specified in ServicesConfiguration.SqlErrorDict and return
+            them as errors
+            </summary>
+            <param name="db"></param>
+            <returns>Task containing status saying whether SaveChanges was successful or not. If not then holds errors</returns>
+        </member>
+        <member name="M:GenericServices.SaveChangesExtensions.TryDecodeDbUpdateException(System.Data.Entity.Infrastructure.DbUpdateException)">
+            <summary>
+            This decodes the DbUpdateException. If there are any errors it can
+            handle then it returns a list of errors. Otherwise it returns null
+            which means rethrow the error as it has not been handled
+            </summary>
+            <param name="ex"></param>
+            <returns>null if cannot handle errors, otherwise a list of errors</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.CreateSetupServiceAsync.GetDtoAsync``1">
+            <summary>
+            This returns the dto with any data that is needs for the view setup in it
+            </summary>
+            <typeparam name="TDto">The type of the data to output. This must be EfGeneric Dto</typeparam>
+            <returns>The dto with any secondary data filled in</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.CreateSetupServiceAsync`2.GetDtoAsync">
+            <summary>
+            This returns the dto with any data that is needs for the view setup in it
+            </summary>
+            <returns>A TDto which has had the SetupSecondaryData method called on it</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.DeleteServiceAsync.DeleteAsync``1(System.Object[])">
+            <summary>
+            This will delete an item from the database
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.DeleteServiceAsync.DeleteWithRelationshipsAsync``1(System.Func{GenericServices.IGenericServicesDbContext,``0,System.Threading.Tasks.Task{GenericLibsBase.ISuccessOrErrors}},System.Object[])">
+            <summary>
+            This allows a developer to delete an entity plus any of its relationships.
+            The first part of the method finds the given entity using the provided keys.
+            It then calls the deleteRelationships method which should remove the extra relationships
+            </summary>
+            <param name="removeRelationshipsAsync">method which is handed the DbContext and the found entity.
+            It should then remove any relationships on this entity that it wants to.
+            It returns a status, if IsValid then calls SaveChangesWithChecking</param>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.DetailServiceAsync.GetDetailAsync``1(System.Object[])">
+            <summary>
+            This returns a status which, if Valid, contains a single entry found using its primary keys.
+            </summary>
+            <typeparam name="T">The type of the data to output. 
+            Type must be a type either an EF data class or one of the EfGenericDto's</typeparam>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Status. If valid Result holds data (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.DetailServiceAsync`1.GetDetailUsingWhereAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This gets a single entry using the lambda expression as a where part
+            </summary>
+            <param name="whereExpression">Should be a 'where' expression that returns one item</param>
+            <returns>Task with Status. If valid Result is data as read from database (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.DetailServiceAsync`1.GetDetailAsync(System.Object[])">
+            <summary>
+            This finds an entry using the primary key(s) in the data
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Task with Status. If valid Result is data as read from database (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.DetailServiceAsync`2.GetDetailUsingWhereAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This gets a single entry using the lambda expression as a where part
+            </summary>
+            <param name="whereExpression">Should be a 'where' expression that returns one item</param>
+            <returns>Task with Status. If valid Result is data as read from database (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.DetailServiceAsync`2.GetDetailAsync(System.Object[])">
+            <summary>
+            This finds an entry using the primary key(s) in the data
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Task with Status. If valid Result is data as read from database (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.UpdateServiceAsync.UpdateAsync``1(``0)">
+            <summary>
+            This updates the data in the database using the input data
+            </summary>
+            <typeparam name="T">The type of input data. 
+            Type must be a type either an EF data class or one of the EfGenericDto's</typeparam>
+            <param name="data">data to update the class. If Dto then copied over to data class</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.UpdateServiceAsync.ResetDtoAsync``1(``0)">
+            <summary>
+            This is available to reset any secondary data in the dto. Call this if the ModelState was invalid and
+            you need to display the view again with errors
+            </summary>
+            <param name="dto">Must be a dto inherited from EfGenericDtoAsync</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.UpdateServiceAsync`1.UpdateAsync(`0)">
+            <summary>
+            This updates the entity data class directly
+            </summary>
+            <param name="itemToUpdate"></param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.UpdateServiceAsync`2.UpdateAsync(`1)">
+            <summary>
+            This updates the entity data by copying over the relevant dto data.
+            If it fails it resets the dto in case it is going to be shown again
+            </summary>
+            <param name="dto">If an error then its resets any secondary data so that you can reshow the dto</param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.UpdateServiceAsync`2.ResetDtoAsync(`1)">
+            <summary>
+            This is available to reset any secondary data in the dto. Call this if the ModelState was invalid and
+            you need to display the view again with errors
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.UpdateSetupServiceAsync.GetOriginalAsync``1(System.Object[])">
+            <summary>
+            This returns a status which, if Valid, has single entry using the primary keys to find it.
+            </summary>
+            <typeparam name="T">The type of the data to output. 
+            Type must be a type either an EF data class or one of the EfGenericDto's</typeparam>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Task with Status. If valid Result holds data (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.UpdateSetupServiceAsync`1.GetOriginalUsingWhereAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This gets a single entry using the lambda expression as a where part
+            </summary>
+            <param name="whereExpression">Should be a 'where' expression that returns one item</param>
+            <returns>Task with Status. If valid Result holds data (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.UpdateSetupServiceAsync`1.GetOriginalAsync(System.Object[])">
+            <summary>
+            This finds an entry using the primary key(s) in the data
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Task with Status. If valid Result holds data (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.UpdateSetupServiceAsync`2.GetOriginalUsingWhereAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This gets a single entry using the lambda expression as a where part. It also calls
+            the dto's SetupSecondaryData to setup any extra data needed
+            </summary>
+            <param name="whereExpression">Should be a 'where' expression that returns one item</param>
+            <returns>Task with Status. If valid TDto type with properties copyed over and SetupSecondaryData called 
+            to set secondary data, otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.UpdateSetupServiceAsync`2.GetOriginalAsync(System.Object[])">
+            <summary>
+            This returns a single entry using the primary keys to find it. It also calls
+            the dto's SetupSecondaryData to setup any extra data needed
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Task with Status. If valid TDto type with properties copyed over and SetupSecondaryData called 
+            to set secondary data, otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.CreateServiceAsync.CreateAsync``1(``0)">
+            <summary>
+            This adds a new entity class to the database with error checking
+            </summary>
+            <typeparam name="T">The type of the data to output. 
+            Type must be a type either an EF data class or one of the EfGenericDto's</typeparam>
+            <param name="newItem">either entity class or dto to create the data item with</param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.CreateServiceAsync.ResetDtoAsync``1(``0)">
+            <summary>
+            This is available to reset any secondary data in the dto. Call this if the ModelState was invalid and
+            you need to display the view again with errors
+            </summary>
+            <param name="dto">Must be a dto inherited from EfGenericDtoAsync</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.CreateServiceAsync`1.CreateAsync(`0)">
+            <summary>
+            This adds a new entity class to the database with error checking
+            </summary>
+            <param name="newItem"></param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.CreateServiceAsync`2.CreateAsync(`1)">
+            <summary>
+            This uses a dto to create a data class which it writes to the database with error checking
+            </summary>
+            <param name="dto">If an error then its resets any secondary data so that you can reshow the dto</param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.Concrete.CreateServiceAsync`2.ResetDtoAsync(`1)">
+            <summary>
+            This is available to reset any secondary data in the dto. Call this if the ModelState was invalid and
+            you need to display the view again with errors
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.ICreateServiceAsync`1.CreateAsync(`0)">
+            <summary>
+            This adds a new entity class to the database with error checking
+            </summary>
+            <param name="newItem"></param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.ICreateServiceAsync`2.CreateAsync(`1)">
+            <summary>
+            This uses a dto to create a data class which it writes to the database with error checking
+            </summary>
+            <param name="dto">If an error then its resets any secondary data so that you can reshow the dto</param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.ICreateServiceAsync`2.ResetDtoAsync(`1)">
+            <summary>
+            This is available to reset any secondary data in the dto. Call this if the ModelState was invalid and
+            you need to display the view again with errors
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.ICreateSetupServiceAsync`2.GetDtoAsync">
+            <summary>
+            This returns the dto with any data that is needs for the view setup in it
+            </summary>
+            <returns>An async Task TDto which has had the SetupSecondaryData method called on it</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.IDetailServiceAsync`1.GetDetailUsingWhereAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This gets a single entry using the lambda expression as a where part
+            </summary>
+            <param name="whereExpression">Should be a 'where' expression that returns one item</param>
+            <returns>Task with Status. If valid Result is data as read from database (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.IDetailServiceAsync`1.GetDetailAsync(System.Object[])">
+            <summary>
+            This finds an entry using the primary key(s) in the data
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Task with Status. If valid Result is data as read from database (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.IDetailServiceAsync`2.GetDetailUsingWhereAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This gets a single entry using the lambda expression as a where part
+            </summary>
+            <param name="whereExpression">Should be a 'where' expression that returns one item</param>
+            <returns>Task with Status. If valid Result is data as read from database (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.IDetailServiceAsync`2.GetDetailAsync(System.Object[])">
+            <summary>
+            This finds an entry using the primary key(s) in the data
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Task with Status. If valid Result is data as read from database (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.IUpdateServiceAsync`1.UpdateAsync(`0)">
+            <summary>
+            This updates the entity data class directly
+            </summary>
+            <param name="itemToUpdate"></param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.IUpdateServiceAsync`2.UpdateAsync(`1)">
+            <summary>
+            This updates the entity data by copying over the relevant dto data.
+            If it fails it resets the dto in case it is going to be shown again
+            </summary>
+            <param name="dto">If an error then its resets any secondary data so that you can reshow the dto</param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.IUpdateServiceAsync`2.ResetDtoAsync(`1)">
+            <summary>
+            This is available to reset any secondary data in the dto. Call this if the ModelState was invalid and
+            you need to display the view again with errors
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.IUpdateSetupServiceAsync`1.GetOriginalUsingWhereAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This gets a single entry using the lambda expression as a where part
+            </summary>
+            <param name="whereExpression">Should be a 'where' expression that returns one item</param>
+            <returns>Task with Status. If valid Result holds data (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.IUpdateSetupServiceAsync`1.GetOriginalAsync(System.Object[])">
+            <summary>
+            This finds an entry using the primary key(s) in the data
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Task with Status. If valid Result holds data (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.IUpdateSetupServiceAsync`2.GetOriginalUsingWhereAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This gets a single entry using the lambda expression as a where part. It also calls
+            the dto's SetupSecondaryData to setup any extra data needed
+            </summary>
+            <param name="whereExpression">Should be a 'where' expression that returns one item</param>
+            <returns>Task with Status. If valid TDto type with properties copyed over and SetupSecondaryData called 
+            to set secondary data, otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ServicesAsync.IUpdateSetupServiceAsync`2.GetOriginalAsync(System.Object[])">
+            <summary>
+            This returns a single entry using the primary keys to find it. It also calls
+            the dto's SetupSecondaryData to setup any extra data needed
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Task with Status. If valid TDto type with properties copyed over and SetupSecondaryData called 
+            to set secondary data, otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ICreateServiceAsync.CreateAsync``1(``0)">
+            <summary>
+            This adds a new entity class to the database with error checking
+            </summary>
+            <typeparam name="T">The type of the data to output. 
+            Type must be a type either an EF data class or one of the EfGenericDto's</typeparam>
+            <param name="newItem">either entity class or dto to create the data item with</param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.ICreateServiceAsync.ResetDtoAsync``1(``0)">
+            <summary>
+            This is available to reset any secondary data in the dto. Call this if the ModelState was invalid and
+            you need to display the view again with errors
+            </summary>
+            <param name="dto">Must be a dto inherited from EfGenericDtoAsync</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.ICreateSetupServiceAsync.GetDtoAsync``1">
+            <summary>
+            This returns the dto with any data that is needs for the view setup in it
+            </summary>
+            <typeparam name="TDto">The type of the data to output. This must be EfGeneric Dto</typeparam>
+            <returns>The dto with any secondary data filled in</returns>
+        </member>
+        <member name="M:GenericServices.IDetailServiceAsync.GetDetailAsync``1(System.Object[])">
+            <summary>
+            This returns a status which, if Valid, contains a single entry found using its primary keys.
+            </summary>
+            <typeparam name="T">The type of the data to output. 
+            Type must be a type either an EF data class or one of the EfGenericDto's</typeparam>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Status. If valid Result holds data (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.IDeleteServiceAsync.DeleteAsync``1(System.Object[])">
+            <summary>
+            This will delete an item from the database
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.IDeleteServiceAsync.DeleteWithRelationshipsAsync``1(System.Func{GenericServices.IGenericServicesDbContext,``0,System.Threading.Tasks.Task{GenericLibsBase.ISuccessOrErrors}},System.Object[])">
+            <summary>
+            This allows a developer to delete an entity plus any of its relationships.
+            The first part of the method finds the given entity using the provided keys.
+            It then calls the deleteRelationships method which should remove the extra relationships
+            </summary>
+            <param name="removeRelationshipsAsync">method which is handed the DbContext and the found entity.
+            It should then remove any relationships on this entity that it wants to.
+            It returns a status, if IsValid then calls SaveChangesWithChecking</param>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.IUpdateServiceAsync.UpdateAsync``1(``0)">
+            <summary>
+            This updates the data in the database using the input data
+            </summary>
+            <typeparam name="T">The type of input data. 
+            Type must be a type either an EF data class or one of the EfGenericDto's</typeparam>
+            <param name="data">data to update the class. If Dto then copied over to data class</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.IUpdateServiceAsync.ResetDtoAsync``1(``0)">
+            <summary>
+            This is available to reset any secondary data in the dto. Call this if the ModelState was invalid and
+            you need to display the view again with errors
+            </summary>
+            <param name="dto">Must be a dto inherited from EfGenericDtoAsync</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.IUpdateSetupServiceAsync.GetOriginalAsync``1(System.Object[])">
+            <summary>
+            This returns a status which, if Valid, has single entry using the primary keys to find it.
+            </summary>
+            <typeparam name="T">The type of the data to output. 
+            Type must be a type either an EF data class or one of the EfGenericDto's</typeparam>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Task with Status. If valid Result holds data (not tracked), otherwise null</returns>
+        </member>
+        <member name="T:GenericServices.HandleSqlException">
+            <summary>
+            This is the signiture of the method called on a SqlException happening in SaveChangesWithChecking (sync and async)
+            </summary>
+            <param name="exception">This is the Sql Exception that occured</param>
+            <param name="entitiesThatErrored">DbEntityEntry objects that represents the entities that could not be saved to the database</param>
+            <returns>return ValidationResult with error, or null if cannot handle this error</returns>
+        </member>
+        <member name="T:GenericServices.RealiseSingleException">
+            <summary>
+            This is the signiture of the method called if an exception is found in the RealiseSingleWithErrorChecking
+            </summary>
+            <param name="ex">the exception thrown</param>
+            <param name="callingMethodName">the name of the calling method (can be used for logging)</param>
+            <returns>error message, or null if no error</returns>
+        </member>
+        <member name="T:GenericServices.GenericServicesConfig">
+            <summary>
+            This static class holds the GenericService configuration parts
+            </summary>
+        </member>
+        <member name="P:GenericServices.GenericServicesConfig.SqlErrorDict">
+            <summary>
+            This contains the SqlErrorNumbers that will be caught by SaveChangesWithChecking (sync and Async)
+            </summary>
+        </member>
+        <member name="P:GenericServices.GenericServicesConfig.SqlHandlerDict">
+            <summary>
+            This contains the HandleSqlException methods by Sql Error number that will be caught by SaveChangesWithChecking (sync and Async)
+            </summary>
+        </member>
+        <member name="P:GenericServices.GenericServicesConfig.RealiseSingleExceptionMethod">
+            <summary>
+            This can be set to a method that is called in RealiseSingleWithErrorChecking when an exception occurs.
+            RealiseSingleWithErrorChecking is used when a single DTO/Enity is asked for inside DetailService and
+            UpdateSetupService, plus RealiseSingleWithErrorChecking can be used as an extension. 
+            The method you provide should return a error string if it can decode the error for the user, otherwise should return null
+            </summary>
+        </member>
+        <member name="P:GenericServices.GenericServicesConfig.UseDelegateDecompilerWhereNeeded">
+            <summary>
+            Set this if you want Generic Services to use the DelegateDecompiler. See documentation for more information
+            </summary>
+        </member>
+        <member name="M:GenericServices.GenericServicesConfig.ClearAutoMapperCache">
+            <summary>
+            This clears any AutoMapper mappings. Used when Unit Testing to ensure the mappings are newly set up.
+            </summary>
+        </member>
+        <member name="M:GenericServices.GenericServicesConfig.ClearSqlErrorDict">
+            <summary>
+            This clears the SqlErrorDict of all entries
+            </summary>
+        </member>
+        <member name="M:GenericServices.GenericServicesConfig.ClearSqlHandlerDict">
+            <summary>
+            This clears the SqlHandlerDict of all entries
+            </summary>
+        </member>
+        <member name="M:GenericServices.GenericServicesConfig.AddToSqlErrorDict(System.Int32,System.String)">
+            <summary>
+            This adds an entry to the SqlErrorDict
+            </summary>
+            <param name="sqlErrorNumber"></param>
+            <param name="errorText"></param>
+        </member>
+        <member name="M:GenericServices.GenericServicesConfig.AddToSqlHandlerDict(System.Int32,GenericServices.HandleSqlException,System.Boolean)">
+            <summary>
+            This adds an ErrorHandler to the SqlHandlerDict
+            The ErrorHandler will be called if the specified sql error happens.
+            Note: will throw an exception if an error handler already exists for that sql error number unless 
+            the checkNotAlreadySet is set to false
+            </summary>
+            <param name="sqlErrorNumber"></param>
+            <param name="errorHandler">Called when given sql error number happens with sql error and entities. 
+            Should return ValidationError or null if cannot handle the error</param>
+            <param name="checkNotAlreadySet"></param>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.CreateService.Create``1(``0)">
+            <summary>
+            This adds a new entity class to the database with error checking
+            </summary>
+            <typeparam name="T">The type of the data to output. 
+            Type must be a type either an EF data class or one of the EfGenericDto's</typeparam>
+            <param name="newItem">either entity class or dto to create the data item with</param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.CreateService.ResetDto``1(``0)">
+            <summary>
+            This is available to reset any secondary data in the dto. Call this if the ModelState was invalid and
+            you need to display the view again with errors
+            </summary>
+            <param name="dto">Must be a dto inherited from EfGenericDto</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.CreateService`1.Create(`0)">
+            <summary>
+            This adds a new entity class to the database with error checking
+            </summary>
+            <param name="newItem"></param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.CreateService`2.Create(`1)">
+            <summary>
+            This uses a dto to create a data class which it writes to the database with error checking
+            </summary>
+            <param name="dto">If an error then its resets any secondary data so that you can reshow the dto</param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.CreateService`2.ResetDto(`1)">
+            <summary>
+            This is available to reset any secondary data in the dto. Call this if the ModelState was invalid and
+            you need to display the view again with errors
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.UpdateSetupService.GetOriginal``1(System.Object[])">
+            <summary>
+            This returns a status which, if Valid, has single entry using the primary keys to find it.
+            </summary>
+            <typeparam name="T">The type of the data to output. 
+            Type must be a type either an EF data class or one of the EfGenericDto's</typeparam>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Status. If valid Result holds data (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.UpdateSetupService`1.GetOriginalUsingWhere(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This gets a single entry using the lambda expression as a where part
+            </summary>
+            <param name="whereExpression">Should be a 'where' expression that returns one item</param>
+            <returns>Status. If valid Result holds data (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.UpdateSetupService`1.GetOriginal(System.Object[])">
+            <summary>
+            This finds an entry using the primary key(s) in the data
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Status. If valid Result holds data (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.UpdateSetupService`2.GetOriginal(System.Object[])">
+            <summary>
+            This returns a single entry using the primary keys to find it. It also calls
+            the dto's SetupSecondaryData to setup any extra data needed
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Status. If valid TDto type with properties copyed over and SetupSecondaryData called 
+            to set secondary data, otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.UpdateSetupService`2.GetOriginalUsingWhere(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This gets a single entry using the lambda expression as a where part. It also calls
+            the dto's SetupSecondaryData to setup any extra data needed
+            </summary>
+            <param name="whereExpression">Should be a 'where' expression that returns one item</param>
+            <returns>Status. If valid TDto type with properties copyed over and SetupSecondaryData called 
+            to set secondary data, otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.CreateSetupService.GetDto``1">
+            <summary>
+            This returns the dto with any data that is needs for the view setup in it
+            </summary>
+            <typeparam name="TDto">The type of the data to output. This must be EfGeneric Dto</typeparam>
+            <returns>The dto with any secondary data filled in</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.CreateSetupService`2.GetDto">
+            <summary>
+            This returns the dto with any data that is needs for the view setup in it
+            </summary>
+            <returns>A TDto which has had the SetupSecondaryData method called on it</returns>
+        </member>
+        <member name="T:GenericServices.Services.Concrete.DeleteService">
+            <summary>
+            This holds the methods to delete an entry from the database
+            </summary>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.DeleteService.Delete``1(System.Object[])">
+            <summary>
+            This will delete an item from the database
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.DeleteService.DeleteWithRelationships``1(System.Func{GenericServices.IGenericServicesDbContext,``0,GenericLibsBase.ISuccessOrErrors},System.Object[])">
+            <summary>
+            This allows a developer to delete an entity plus any of its relationships.
+            The first part of the method finds the given entity using the provided keys.
+            It then calls the deleteRelationships method which should remove the extra relationships
+            </summary>
+            <param name="removeRelationships">method which is handed the DbContext and the found entity.
+            It should then remove any relationships on this entity that it wants to.
+            It returns a status, if IsValid then calls SaveChangesWithChecking</param>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.DetailService.GetDetail``1(System.Object[])">
+            <summary>
+            This returns a status which, if Valid, contains a single entry found using its primary keys.
+            </summary>
+            <typeparam name="T">The type of the data to output. 
+            Type must be a type either an EF data class or one of the EfGenericDto's</typeparam>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Status. If valid Result holds data (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.DetailService`1.GetDetailUsingWhere(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This gets a single entry using the lambda expression as a where part. Checks for problems
+            </summary>
+            <param name="whereExpression">Should be a 'where' expression that returns one item</param>
+            <returns>Status. If valid Result is data as read from database (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.DetailService`1.GetDetail(System.Object[])">
+            <summary>
+            This finds an entry using the primary key(s) in the data
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Status. If valid Result is data as read from database (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.DetailService`2.GetDetailUsingWhere(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This gets a single entry using the lambda expression as a where part
+            </summary>
+            <param name="whereExpression">Should be a 'where' expression that returns one item</param>
+            <returns>Status. If Valid then TDto type with properties copyed over, else null</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.DetailService`2.GetDetail(System.Object[])">
+            <summary>
+            This finds an entry using the primary key(s) in the data
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Status. If Valid then TDto type with properties copyed over, else null</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.ListService.GetAll``1">
+            <summary>
+            This returns an IQueryable list of all items of the given type
+            </summary>
+            <typeparam name="T">The type of the data to output. 
+            Type must be a type either an EF data class or a class inherited from the EfGenericDto or EfGenericDtoAsync</typeparam>
+            <returns>note: the list items are not tracked</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.ListService`1.GetAll">
+            <summary>
+            This returns an IQueryable list of all items of the given type
+            </summary>
+            <returns>note: the list items are not tracked</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.ListService`2.GetAll">
+            <summary>
+            This returns an IQueryable list of all items of the given TEntity, but transformed into TDto data type
+            </summary>
+            <returns>note: the list items are not tracked</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.UpdateService.Update``1(``0)">
+            <summary>
+            This updates the data in the database using the input data
+            </summary>
+            <typeparam name="T">The type of input data. 
+            Type must be a type either an EF data class or one of the EfGenericDto's</typeparam>
+            <param name="data">data to update the class. If Dto then copied over to data class</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.UpdateService.ResetDto``1(``0)">
+            <summary>
+            This is available to reset any secondary data in the dto. Call this if the ModelState was invalid and
+            you need to display the view again with errors
+            </summary>
+            <param name="dto">Must be a dto inherited from EfGenericDtoAsync</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.UpdateService`1.Update(`0)">
+            <summary>
+            This updates the entity data class directly
+            </summary>
+            <param name="itemToUpdate"></param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.UpdateService`2.Update(`1)">
+            <summary>
+            This updates the entity data by copying over the relevant dto data.
+            </summary>
+            <param name="dto">If an error then its resets any secondary data so that you can reshow the dto</param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.Services.Concrete.UpdateService`2.ResetDto(`1)">
+            <summary>
+            This is available to reset any secondary data in the dto. Call this if the ModelState was invalid and
+            you need to display the view again with errors
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Services.ICreateService`1.Create(`0)">
+            <summary>
+            This adds a new entity class to the database with error checking
+            </summary>
+            <param name="newItem"></param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.Services.ICreateService`2.Create(`1)">
+            <summary>
+            This uses a dto to create a data class which it writes to the database with error checking
+            </summary>
+            <param name="dto">If an error then its resets any secondary data so that you can reshow the dto</param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.Services.ICreateService`2.ResetDto(`1)">
+            <summary>
+            This is available to reset any secondary data in the dto. Call this if the ModelState was invalid and
+            you need to display the view again with errors
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Services.ICreateSetupService`2.GetDto">
+            <summary>
+            This returns the dto with any data that is needs for the view setup in it
+            </summary>
+            <returns>A TDto which, if required, will have SetupSecondaryData method called on it</returns>
+        </member>
+        <member name="M:GenericServices.Services.IDetailService`1.GetDetailUsingWhere(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This gets a single entry using the lambda expression as a where part
+            </summary>
+            <param name="whereExpression">Should be a 'where' expression that returns one item</param>
+            <returns>Status. If valid Result is data as read from database (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.Services.IDetailService`1.GetDetail(System.Object[])">
+            <summary>
+            This finds an entry using the primary key(s) in the data
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Status. If valid Result is data as read from database (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.Services.IDetailService`2.GetDetailUsingWhere(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This gets a single entry using the lambda expression as a where part
+            </summary>
+            <param name="whereExpression">Should be a 'where' expression that returns one item</param>
+            <returns>Status. If Valid then TDto type with properties copyed over, else null</returns>
+        </member>
+        <member name="M:GenericServices.Services.IDetailService`2.GetDetail(System.Object[])">
+            <summary>
+            This finds an entry using the primary key(s) in the data
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Status. If Valid then TDto type with properties copyed over, else null</returns>
+        </member>
+        <member name="M:GenericServices.Services.IListService`1.GetAll">
+            <summary>
+            This returns an IQueryable list of all items of the given type
+            </summary>
+            <returns>note: the list items are not tracked</returns>
+        </member>
+        <member name="M:GenericServices.Services.IListService`2.GetAll">
+            <summary>
+            This returns an IQueryable list of all items of the given type
+            </summary>
+            <returns>note: the list items are not tracked</returns>
+        </member>
+        <member name="M:GenericServices.Services.IUpdateService`1.Update(`0)">
+            <summary>
+            This updates the entity data class directly
+            </summary>
+            <param name="itemToUpdate"></param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.Services.IUpdateService`2.Update(`1)">
+            <summary>
+            This updates the entity data by copying over the relevant dto data.
+            If it fails it resets the dto in case it is going to be shown again
+            </summary>
+            <param name="dto">If an error then its resets any secondary data so that you can reshow the dto</param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.Services.IUpdateService`2.ResetDto(`1)">
+            <summary>
+            This is available to reset any secondary data in the dto. Call this if the ModelState was invalid and
+            you need to display the view again with errors
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.Services.IUpdateSetupService`1.GetOriginalUsingWhere(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This gets a single entry using the lambda expression as a where part
+            </summary>
+            <param name="whereExpression">Should be a 'where' expression that returns one item</param>
+            <returns>Status. If valid Result holds data (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.Services.IUpdateSetupService`1.GetOriginal(System.Object[])">
+            <summary>
+            This finds an entry using the primary key(s) in the data
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Status. If valid Result holds data (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.Services.IUpdateSetupService`2.GetOriginal(System.Object[])">
+            <summary>
+            This returns a single entry using the primary keys to find it. It also calls
+            the dto's SetupSecondaryData to setup any extra data needed
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Status. If valid TDto type with properties copyed over and SetupSecondaryData called 
+            to set secondary data, otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.Services.IUpdateSetupService`2.GetOriginalUsingWhere(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            This gets a single entry using the lambda expression as a where part. It also calls
+            the dto's SetupSecondaryData to setup any extra data needed
+            </summary>
+            <param name="whereExpression">Should be a 'where' expression that returns one item</param>
+            <returns>TDto type with properties copyed over and SetupSecondaryData called to set secondary data</returns>
+        </member>
+        <member name="M:GenericServices.IUpdateSetupService.GetOriginal``1(System.Object[])">
+            <summary>
+            This returns a status which, if Valid, has single entry using the primary keys to find it.
+            </summary>
+            <typeparam name="T">The type of the data to output. 
+            Type must be a type either an EF data class or one of the EfGenericDto's</typeparam>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Status. If valid Result holds data (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.ICreateSetupService.GetDto``1">
+            <summary>
+            This returns the dto with any data that is needs for the view setup in it
+            </summary>
+            <typeparam name="TDto">The type of the data to output. This must be EfGeneric Dto</typeparam>
+            <returns>The dto with any secondary data filled in</returns>
+        </member>
+        <member name="M:GenericServices.ICreateService.Create``1(``0)">
+            <summary>
+            This adds a new entity class to the database with error checking
+            </summary>
+            <typeparam name="T">The type of the data to output. 
+            Type must be a type either an EF data class or one of the EfGenericDto's</typeparam>
+            <param name="newItem">either entity class or dto to create the data item with</param>
+            <returns>status</returns>
+        </member>
+        <member name="M:GenericServices.ICreateService.ResetDto``1(``0)">
+            <summary>
+            This is available to reset any secondary data in the dto. Call this if the ModelState was invalid and
+            you need to display the view again with errors
+            </summary>
+            <param name="dto">Must be a dto inherited from EfGenericDto</param>
+            <returns></returns>
+        </member>
+        <member name="T:GenericServices.IGenericServicesDbContext">
+            <summary>
+            This is the interface that developers should placed on the DbContext in there project
+            It will allow the GenericServices commands to woek with your context
+            Also useful for dependency injection.
+            </summary>
+        </member>
+        <member name="M:GenericServices.IDeleteService.Delete``1(System.Object[])">
+            <summary>
+            This will delete an item from the database
+            </summary>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.IDeleteService.DeleteWithRelationships``1(System.Func{GenericServices.IGenericServicesDbContext,``0,GenericLibsBase.ISuccessOrErrors},System.Object[])">
+            <summary>
+            This allows a developer to delete an entity plus any of its relationships.
+            The first part of the method finds the given entity using the provided keys.
+            It then calls the deleteRelationships method which should remove the extra relationships
+            </summary>
+            <param name="removeRelationships">method which is handed the DbContext and the found entity.
+            It should then remove any relationships on this entity that it wants to.
+            It returns a status, if IsValid then calls SaveChangesWithChecking</param>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.IDetailService.GetDetail``1(System.Object[])">
+            <summary>
+            This returns a status which, if Valid, contains a single entry found using its primary keys.
+            </summary>
+            <typeparam name="T">The type of the data to output. 
+            Type must be a type either an EF data class or one of the EfGenericDto's</typeparam>
+            <param name="keys">The keys must be given in the same order as entity framework has them</param>
+            <returns>Status. If valid Result holds data (not tracked), otherwise null</returns>
+        </member>
+        <member name="M:GenericServices.IListService.GetAll``1">
+            <summary>
+            This works out what sort of service is needed from the type provided
+            and returns an IQueryable list of all items of the given type
+            </summary>
+            <typeparam name="T">The type of the data to output. 
+            Type must be a type either an EF data class or a class inherited from the EfGenericDto or EfGenericDtoAsync</typeparam>
+            <returns>note: the list items are not tracked</returns>
+        </member>
+        <member name="M:GenericServices.IUpdateService.Update``1(``0)">
+            <summary>
+            This updates the data in the database using the input data
+            </summary>
+            <typeparam name="T">The type of input data. 
+            Type must be a type either an EF data class or one of the EfGenericDto's</typeparam>
+            <param name="data">data to update the class. If Dto then copied over to data class</param>
+            <returns></returns>
+        </member>
+        <member name="M:GenericServices.IUpdateService.ResetDto``1(``0)">
+            <summary>
+            This is available to reset any secondary data in the dto. Call this if the ModelState was invalid and
+            you need to display the view again with errors
+            </summary>
+            <param name="dto">Must be a dto inherited from EfGenericDtoAsync</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
